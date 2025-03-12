@@ -5,52 +5,59 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
+import java.util.List;
 
 public class DropDown {
 
-	WebDriver driver;
-	public void setup()
-	{
-		System.setProperty("webdriver.chrome.driver", "./Driver/chromedriver.exe");
-		driver=new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.get("https://letcode.in/test");
-	}
-	
-	public void dropdown()
-	{
-		driver.findElement(By.xpath("//a[normalize-space()='Drop-Down']")).click();	
-		WebElement dropdown=driver.findElement(By.id("fruits"));
-		Select drop=new Select(dropdown);
-		drop.selectByVisibleText("Orange");
-		
-		WebElement dropdown2=driver.findElement(By.id("superheros"));
-		Select drop2=new Select(dropdown2);
-		drop2.selectByVisibleText("Captain America");
-		
-		WebElement drop3=driver.findElement(By.id("lang"));
-		Select dropp3=new Select(drop3);
-		dropp3.selectByValue("sharp");
-		System.out.println("all options"+drop3.getText());
-		
-		WebElement drop4=driver.findElement(By.id("country"));
-		Select text=new Select(drop4);
-		text.selectByVisibleText("India");
-        WebElement selectedOption = text.getFirstSelectedOption();
-		System.out.println("selcted option is "+selectedOption.getText());
-		
-	}
-	void teardown()
-	{
-		driver.quit();
-	}
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		DropDown obj=new DropDown();
-		obj.setup();
-		obj.dropdown();
-		obj.teardown();
+    WebDriver driver;
 
-	}
+    public DropDown() {
+        System.setProperty("webdriver.chrome.driver", "./Driver/chromedriver.exe");
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("https://letcode.in/test");
+    }
 
+    public void dropdown() {
+        try {
+            driver.findElement(By.xpath("//a[normalize-space()='Drop-Down']")).click();
+
+            WebElement fruitDropdown = driver.findElement(By.id("fruits"));
+            Select fruitSelect = new Select(fruitDropdown);
+            fruitSelect.selectByVisibleText("Orange");
+
+            WebElement heroDropdown = driver.findElement(By.id("superheros"));
+            Select heroSelect = new Select(heroDropdown);
+            heroSelect.selectByVisibleText("Captain America");
+
+            WebElement langDropdown = driver.findElement(By.id("lang"));
+            Select langSelect = new Select(langDropdown);
+            langSelect.selectByValue("sharp");
+
+            List<WebElement> allOptions = langSelect.getOptions();
+            System.out.print("All available language options: ");
+            for (WebElement option : allOptions) {
+                System.out.print(option.getText() + ", ");
+            }
+            System.out.println();
+
+            WebElement countryDropdown = driver.findElement(By.id("country"));
+            Select countrySelect = new Select(countryDropdown);
+            countrySelect.selectByVisibleText("India");
+
+            WebElement selectedOption = countrySelect.getFirstSelectedOption();
+            System.out.println("Selected country: " + selectedOption.getText());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.quit();
+            System.out.println("Browser closed.");
+        }
+    }
+
+    public static void main(String[] args) {
+        DropDown obj = new DropDown(); 
+        obj.dropdown();
+    }
 }
